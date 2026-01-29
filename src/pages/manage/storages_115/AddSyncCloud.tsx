@@ -62,7 +62,11 @@ export const AddSyncCloud = (props: {
   }
 
   return (
-    <Modal opened={props.isOpen} onClose={props.onClose}>
+    <Modal
+      opened={props.isOpen}
+      onClose={props.onClose}
+      closeOnOverlayClick={false}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
