@@ -79,7 +79,7 @@ const Storages = () => {
           "@md": "unset",
         }}
       >
-        <Button
+        {/* <Button
           colorScheme="accent"
           loading={getStoragesLoading()}
           onClick={refresh}
@@ -92,9 +92,9 @@ const Storages = () => {
           }}
         >
           {t("global.add")}
-        </Button>
+        </Button> */}
         <Button onClick={() => setAddSyncCloudOpen(true)}>Add Sync Cloud</Button>
-        <Button
+        {/* <Button
           colorScheme="warning"
           loading={getStoragesLoading()}
           onClick={loadAll}
@@ -130,15 +130,15 @@ const Storages = () => {
               </SelectListbox>
             </SelectContent>
           </Select>
-        </Show>
-        <HopeSwitch
+        </Show> */}
+        {/* <HopeSwitch
           checked={layout() === "table"}
           onChange={(e) => {
             setLayout(e.currentTarget.checked ? "table" : "grid")
           }}
         >
           {t("storages.other.table_layout")}
-        </HopeSwitch>
+        </HopeSwitch> */}
       </HStack>
       <Switch>
         <Match when={layout() === "grid"}>
