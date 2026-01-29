@@ -27,11 +27,13 @@ import { handleResp, notify, r } from "~/utils"
 import { EmptyResp, PageResp, Resp, Storage } from "~/types"
 import { StorageGridItem, StorageListItem } from "./Storage"
 import { createStorageSignal } from "@solid-primitives/storage"
+import { AddSyncCloud } from "./AddSyncCloud"
 
 const Storages = () => {
   const t = useT()
   useManageTitle("manage.sidemenu.storages")
   const { to } = useRouter()
+  const [addSyncCloudOpen, setAddSyncCloudOpen] = createSignal(false)
   const [getStoragesLoading, getStorages] = useFetch(
     (): Promise<PageResp<Storage>> => r.get("/admin/storage/list"),
   )
@@ -91,6 +93,7 @@ const Storages = () => {
         >
           {t("global.add")}
         </Button>
+        <Button onClick={() => setAddSyncCloudOpen(true)}>Add Sync Cloud</Button>
         <Button
           colorScheme="warning"
           loading={getStoragesLoading()}
@@ -178,6 +181,11 @@ const Storages = () => {
           </Box>
         </Match>
       </Switch>
+      <AddSyncCloud
+        isOpen={addSyncCloudOpen()}
+        onClose={() => setAddSyncCloudOpen(false)}
+        onSuccess={refresh}
+      />
     </VStack>
   )
 }
