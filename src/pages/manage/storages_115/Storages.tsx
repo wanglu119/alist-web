@@ -28,12 +28,14 @@ import { EmptyResp, PageResp, Resp, Storage } from "~/types"
 import { StorageGridItem, StorageListItem } from "./Storage"
 import { createStorageSignal } from "@solid-primitives/storage"
 import { AddSyncCloud } from "./AddSyncCloud"
+import { SyncCloudList } from "./SyncCloudList"
 
 const Storages = () => {
   const t = useT()
   useManageTitle("manage.sidemenu.storages")
   const { to } = useRouter()
   const [addSyncCloudOpen, setAddSyncCloudOpen] = createSignal(false)
+  const [syncCloudRefreshTrigger, setSyncCloudRefreshTrigger] = createSignal(0)
   const [getStoragesLoading, getStorages] = useFetch(
     (): Promise<PageResp<Storage>> => r.get("/admin/storage/list"),
   )
@@ -140,7 +142,7 @@ const Storages = () => {
           {t("storages.other.table_layout")}
         </HopeSwitch> */}
       </HStack>
-      <Switch>
+      {/* <Switch>
         <Match when={layout() === "grid"}>
           <Grid
             w="$full"
@@ -180,12 +182,13 @@ const Storages = () => {
             </Table>
           </Box>
         </Match>
-      </Switch>
+      </Switch> */}
       <AddSyncCloud
         isOpen={addSyncCloudOpen()}
         onClose={() => setAddSyncCloudOpen(false)}
-        onSuccess={refresh}
+        onSuccess={() => setSyncCloudRefreshTrigger((n) => n + 1)}
       />
+      <SyncCloudList refreshTrigger={syncCloudRefreshTrigger()} />
     </VStack>
   )
 }
