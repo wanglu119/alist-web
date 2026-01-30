@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   Grid,
   HStack,
   Text,
@@ -37,11 +38,33 @@ const SyncCloudCard = (props: { task: SyncCloudTask; refresh: () => void }) => {
   const [deleteLoading, deleteSyncCloud] = useFetch(() =>
     r.post("/wl/sync_cloud/delete", { id: props.task.proc_info.id })
   )
+  const [startLoading, startSyncCloud] = useFetch(() =>
+    r.post("/wl/sync_cloud/start", { id: props.task.proc_info.id })
+  )
+  const [stopLoading, stopSyncCloud] = useFetch(() =>
+    r.post("/wl/sync_cloud/stop", { id: props.task.proc_info.id })
+  )
 
   const handleDelete = async () => {
     const resp = await deleteSyncCloud()
     handleResp(resp, () => {
-      notify.success("global.delete_success")
+      notify.success(t("global.delete_success"))
+      props.refresh()
+    })
+  }
+
+  const handleStart = async () => {
+    const resp = await startSyncCloud()
+    handleResp(resp, () => {
+      notify.success(t("global.start_success"))
+      props.refresh()
+    })
+  }
+
+  const handleStop = async () => {
+    const resp = await stopSyncCloud()
+    handleResp(resp, () => {
+      notify.success(t("global.stop_success"))
       props.refresh()
     })
   }
@@ -106,7 +129,18 @@ const SyncCloudCard = (props: { task: SyncCloudTask; refresh: () => void }) => {
         </Text>
       </Show>
 
-      <HStack w="$full" justifyContent="flex-end">
+      <HStack w="$full" justifyContent="flex-end" spacing="$2">
+        <Button onClick={handleStart} loading={startLoading()} size="sm">
+          {t("global.enable")}
+        </Button>
+        <Button
+          onClick={handleStop}
+          loading={stopLoading()}
+          colorScheme="warning"
+          size="sm"
+        >
+          {t("global.disable")}
+        </Button>
         <DeletePopover
           name={props.task.name}
           loading={deleteLoading()}
