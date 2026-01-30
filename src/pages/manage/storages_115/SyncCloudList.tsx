@@ -10,13 +10,15 @@ import {
 import { createEffect, createSignal, For, Show } from "solid-js"
 import { useFetch, useT } from "~/hooks"
 import { getMainColor } from "~/store"
-import { handleResp, r, formatDate, getFileSize } from "~/utils"
+import { handleResp, r, formatDate, getFileSize, notify } from "~/utils"
+import { DeletePopover } from "../common/DeletePopover"
 
 interface SyncCloudTask {
   name: string
   cloud_type: string
   proc_file_count: number
   proc_info: {
+    id: string
     status: string
     start_time: string
     end_time?: string
@@ -29,9 +31,20 @@ interface SyncCloudListResp {
   tasks: SyncCloudTask[]
 }
 
-const SyncCloudCard = (props: { task: SyncCloudTask }) => {
+const SyncCloudCard = (props: { task: SyncCloudTask; refresh: () => void }) => {
   const t = useT()
   const c = useColorModeValue("$neutral2", "$neutral3")
+  const [deleteLoading, deleteSyncCloud] = useFetch(() =>
+    r.post("/wl/sync_cloud/delete", { id: props.task.proc_info.id })
+  )
+
+  const handleDelete = async () => {
+    const resp = await deleteSyncCloud()
+    handleResp(resp, () => {
+      notify.success("global.delete_success")
+      props.refresh()
+    })
+  }
   
   return (
     <VStack
@@ -92,6 +105,14 @@ const SyncCloudCard = (props: { task: SyncCloudTask }) => {
           {props.task.proc_info.error}
         </Text>
       </Show>
+
+      <HStack w="$full" justifyContent="flex-end">
+        <DeletePopover
+          name={props.task.name}
+          loading={deleteLoading()}
+          onClick={handleDelete}
+        />
+      </HStack>
     </VStack>
   )
 }
@@ -129,7 +150,7 @@ export const SyncCloudList = (props: { refreshTrigger: number }) => {
             "@md": "repeat(auto-fill, minmax(300px, 1fr))",
           }}
         >
-          <For each={tasks()}>{(task) => <SyncCloudCard task={task} />}</For>
+          <For each={tasks()}>{(task) => <SyncCloudCard task={task} refresh={refresh} />}</For>
         </Grid>
       </Show>
     </Box>
