@@ -24,6 +24,7 @@ interface SyncCloudTask {
     start_time: string
     end_time?: string
     total_bytes: number
+    rate?: number
     error?: string
   }
 }
@@ -106,6 +107,10 @@ const SyncCloudCard = (props: { task: SyncCloudTask; refresh: () => void }) => {
         <Box>
           <Text color="$neutral9">Total Size</Text>
           <Text>{getFileSize(props.task.proc_info.total_bytes)}</Text>
+        </Box>
+        <Box>
+          <Text color="$neutral9">Rate</Text>
+          <Text>{props.task.proc_info.rate ? props.task.proc_info.rate + " MB/s" : "-"}</Text>
         </Box>
         <Box>
           <Text color="$neutral9">Files</Text>
