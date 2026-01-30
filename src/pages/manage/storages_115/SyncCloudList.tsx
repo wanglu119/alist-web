@@ -110,7 +110,7 @@ const SyncCloudCard = (props: { task: SyncCloudTask; refresh: () => void }) => {
         </Box>
         <Box>
           <Text color="$neutral9">Rate</Text>
-          <Text>{props.task.proc_info.rate ? props.task.proc_info.rate + " MB/s" : "-"}</Text>
+          <Text>{props.task.rate ? props.task.rate.toFixed(2) + " MB/s" : "-"}</Text>
         </Box>
         <Box>
           <Text color="$neutral9">Files</Text>
