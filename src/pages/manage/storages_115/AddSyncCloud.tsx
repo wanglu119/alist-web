@@ -38,8 +38,8 @@ export const AddSyncCloud = (props: {
     access_key: "",
     secret_key: "",
     bucket_name: "",
-    endpoint: "oss-ap-southeast-1.aliyuncs.com",
-    region: "ap-southeast-1",
+    endpoint: "",
+    region: "",
     prefix: "",
     dst_dir: "",
   })
