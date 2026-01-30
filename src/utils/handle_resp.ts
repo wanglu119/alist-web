@@ -10,10 +10,10 @@ export const handleResp = <T>(
   notify_success?: boolean,
 ) => {
   if (resp.code === 200) {
-    notify_success && notify.success(resp.message)
+    notify_success && notify.success(resp.message || "Success")
     success?.(resp.data)
   } else {
-    notify_error && notify.error(resp.message)
+    notify_error && notify.error(resp.message || "Error")
     if (auth && resp.code === 401) {
       if (location.pathname === "/@manage") {
         bus.emit("to", "/")
